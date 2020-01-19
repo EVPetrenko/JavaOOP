@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/JavaOOP.iml" filepath="$PROJECT_DIR$/JavaOOP.iml" />
       <module fileurl="file://$PROJECT_DIR$/oop01_Range/oop01_Range.iml" filepath="$PROJECT_DIR$/oop01_Range/oop01_Range.iml" />
+      <module fileurl="file://$PROJECT_DIR$/oop02_Range_v2/oop02_Range_v2.iml" filepath="$PROJECT_DIR$/oop02_Range_v2/oop02_Range_v2.iml" />
     </modules>
   </component>
 </project>
