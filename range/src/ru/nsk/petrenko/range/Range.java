@@ -1,10 +1,10 @@
-package ru.nsk.petrenko.Range;
+package ru.nsk.petrenko.range;
 
-public class oop01_Range {
+public class Range {
     private double from;
     private double to;
 
-    public oop01_Range(double from, double to) {
+    public Range(double from, double to) {
         this.from = from;
         this.to = to;
     }

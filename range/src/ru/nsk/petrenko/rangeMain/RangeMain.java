@@ -1,11 +1,13 @@
-import ru.nsk.petrenko.Range.oop01_Range;
+package ru.nsk.petrenko.rangeMain;
+
+import ru.nsk.petrenko.range.Range;
 
 import java.util.Scanner;
 
-public class oop01_RangeMain {
+public class RangeMain {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        oop01_Range range = new oop01_Range(0, 0);
+        Range range = new Range(0, 0);
 
         System.out.println("Укажи граничные значения диапазона: ");
         range.setFrom(scanner.nextDouble());
