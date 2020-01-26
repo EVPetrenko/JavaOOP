@@ -3,7 +3,6 @@ package ru.nsk.petrenko.range;
 public class Range {
     private double from;
     private double to;
-    private int rangeOverlayType = 0;
 
     public Range(double from, double to) {
         this.from = from;
@@ -26,68 +25,38 @@ public class Range {
         return to;
     }
 
-    public double[] getLength(double from, double to) {
-        return new double[]{this.to - this.from, to - from};
-    }
-
-    private void rangeOverlay(double from, double to) {
-        double epsilon = 1.0e-10;
-
-        if (from >= this.from && from <= this.to) {
-            if (to > this.to) {
-                this.rangeOverlayType = 1;
-            } else if (to <= this.to + epsilon && to >= this.to - epsilon) {
-                this.to = to; // для корректности
-                this.rangeOverlayType = 1;
-            } else {
-                this.rangeOverlayType = 2;
-            }
-        } else if (this.to >= from && to <= this.to) {
-            if (this.from < from) {
-                this.rangeOverlayType = 1;
-            } else if (this.from <= from + epsilon && this.to >= from - epsilon) {
-                this.from = from; // для корректности
-                this.rangeOverlayType = 1;
-            } else {
-                this.rangeOverlayType = 2;
-            }
-        }
-    }
-
-    public double[] rangeInterval(double from, double to) { // Интервал пересечения
-        rangeOverlay(from, to);
-
-        if (rangeOverlayType == 0) {
-            return null;
-        }
-        return new double[]{Math.max(this.from, from), Math.min(this.to, to)};
-    }
-
-    public double[] combiningIntervals(double from, double to) { // Объединение интервалов
-        if (rangeOverlayType == 0) {
-            return new double[]{this.from, this.to, from, to};
-        }
-        return new double[]{Math.min(this.from, from), Math.max(this.to, to)};
-    }
-
-    public double[] intervalDifference(double from, double to, double[] getLength) { // Получение разности
-        if (rangeOverlayType == 1) {
-            if (this.from < from) {
-                return new double[]{this.from, Math.min(from, this.to)};
-            } else if (to > this.to) {
-                return new double[]{Math.max(this.to, from), to};
-            }
-        } else if (rangeOverlayType == 2) {
-            if (getLength[0] >= getLength[1]) {
-                return new double[]{this.from, from, to, this.to};
-            } else {
-                return new double[]{from, this.from, this.to, to};
-            }
-        }
-        return null;
+    public double[] getLength() {
+        return new double[]{to - from};
     }
 
     public boolean isInside(double number) {
         return number >= from && number <= to;
+    }
+
+    public double[] intersection(Range rangeTwo) { // пересечение
+        if ((rangeTwo.from < this.to && rangeTwo.from >= this.from) || (this.from < rangeTwo.to && this.from >= rangeTwo.from)) {
+            return new double[]{Math.max(this.from, rangeTwo.from), Math.min(this.to, rangeTwo.to)};
+        }
+        return null; // Соответстует заданию
+    }
+
+    public double[][] combine(Range rangeTwo) { // Объединение интервалов
+        if ((rangeTwo.from >= this.from && rangeTwo.from <= this.to) || (this.to >= rangeTwo.from && rangeTwo.to <= this.to)) {
+            return new double[][]{{Math.min(this.from, rangeTwo.from), Math.max(this.to, rangeTwo.to)}, {}};
+        }
+        return new double[][]{{this.from, this.to}, {rangeTwo.from, rangeTwo.to}};
+    }
+
+    public double[][] getDifference(Range rangeTwo) { // Получение разности
+        if (rangeTwo.from <= this.from && this.from <= rangeTwo.to && rangeTwo.to <= this.to) {
+            return new double[][]{{rangeTwo.to, this.to}, {}};
+        } else if (rangeTwo.from >= this.from && this.to >= rangeTwo.from && rangeTwo.to >= this.to) {
+            return new double[][]{{this.from, rangeTwo.from}, {}};
+        } else if (rangeTwo.from < this.from && this.to < rangeTwo.to) {
+            return new double[][]{{rangeTwo.from, this.from}, {this.to, rangeTwo.to}};
+        } else if (this.from < rangeTwo.from && rangeTwo.to < this.to) {
+            return new double[][]{{this.from, rangeTwo.from}, {rangeTwo.to, this.to}};
+        }
+        return new double[][]{{}, {}};
     }
 }
