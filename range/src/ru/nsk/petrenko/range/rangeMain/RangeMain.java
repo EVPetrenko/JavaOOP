@@ -2,47 +2,54 @@ package ru.nsk.petrenko.range.rangeMain;
 
 import ru.nsk.petrenko.range.Range;
 
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class RangeMain {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Range rangeOne = new Range(0, 0);
-        Range rangeTwo = new Range(0, 0);
+
+        Range range1 = new Range(0, 0);
+        Range range2 = new Range(0, 0);
 
         System.out.println("Укажи граничные значения первого диапазона: ");
-        rangeOne.setFrom(scanner.nextDouble());
-        rangeOne.setTo(scanner.nextDouble());
+        range1.setFrom(scanner.nextDouble());
+        range1.setTo(scanner.nextDouble());
 
-        System.out.printf("%nДлина первого диапазона, %.2f - %.2f, составляет: %.2f%n", rangeOne.getFrom(), rangeOne.getTo(), rangeOne.getLength()[0]);
+        System.out.printf("%nДлина первого диапазона, %.2f - %.2f, составляет: %.2f%n", range1.getFrom(), range1.getTo(), range1.getLength());
         System.out.println("Введи число для проверки его принадлежности к первому диапазону: ");
         double number = scanner.nextDouble();
 
-        if (rangeOne.isInside(number)) {
+        if (range1.isInside(number)) {
             System.out.printf("число %.2f принадлежит диапазону%n%n", number);
         } else {
             System.out.printf("число %.2f не принадлежит диапазону%n%n", number);
         }
 
         System.out.println("Укажи граничные значения второго диапазона: ");
-        rangeTwo.setFrom(scanner.nextDouble());
-        rangeTwo.setTo(scanner.nextDouble());
+        range2.setFrom(scanner.nextDouble());
+        range2.setTo(scanner.nextDouble());
 
-        System.out.printf("%nДлина второго диапазона, %.2f - %.2f, составляет: %.2f%n%n", rangeTwo.getFrom(), rangeTwo.getTo(), rangeTwo.getTo() - rangeTwo.getFrom());
+        System.out.printf("%nДлина второго диапазона, %.2f - %.2f, составляет: %.2f%n%n", range2.getFrom(), range2.getTo(), range2.getTo() - range2.getFrom());
 
-        double[] intersection = rangeOne.intersection(rangeTwo);
+        Range intersection = range1.getIntersection(range2);
         System.out.println("Пересечение диапазонов:");
-        System.out.println(Arrays.toString(intersection));
+        if (intersection != null) {
+            System.out.println(intersection.getFrom() + " - " + intersection.getTo());
+        } else {
+            System.out.println(intersection);
+        }
 
-        double[][] combine = rangeOne.combine(rangeTwo);
+        Range[] combine = range1.getUnion(range2);
         System.out.println("Объединение диапазонов:");
-        System.out.print(Arrays.toString(combine[0]));
-        System.out.println(Arrays.toString(combine[1]));
+
+        for (Range range : combine) {
+            System.out.println(range.getFrom() + " - " + range.getTo());
+        }
 
         System.out.println("Получение разности диапазонов:");
-        double[][] difference = rangeOne.getDifference(rangeTwo);
-        System.out.print(Arrays.toString(difference[0]));
-        System.out.println(Arrays.toString(difference[1]));
+        Range[] difference = range1.getDifference(range2);
+        for (Range range : difference) {
+            System.out.println(range.getFrom() + " - " + range.getTo());
+        }
     }
 }
