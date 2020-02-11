@@ -8,14 +8,14 @@ public class RangeMain {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        Range range1 = new Range(0, 0);
-        Range range2 = new Range(0, 0);
-
         System.out.println("Укажи граничные значения первого диапазона: ");
+        Range range1 = new Range(scanner.nextDouble(), scanner.nextDouble()); // Если единственное/однократное задание значений без Сеттеров являеться плохим стилем, дайте знать
+        /*
         range1.setFrom(scanner.nextDouble());
         range1.setTo(scanner.nextDouble());
+         */
 
-        System.out.printf("%nДлина первого диапазона, %.2f - %.2f, составляет: %.2f%n", range1.getFrom(), range1.getTo(), range1.getLength());
+        System.out.printf("%nПервого диапазона (%.2f; %.2f), длина составляет: %.2f%n", range1.getFrom(), range1.getTo(), range1.getLength());
         System.out.println("Введи число для проверки его принадлежности к первому диапазону: ");
         double number = scanner.nextDouble();
 
@@ -26,30 +26,42 @@ public class RangeMain {
         }
 
         System.out.println("Укажи граничные значения второго диапазона: ");
-        range2.setFrom(scanner.nextDouble());
-        range2.setTo(scanner.nextDouble());
+        Range range2 = new Range(scanner.nextDouble(), scanner.nextDouble());
 
-        System.out.printf("%nДлина второго диапазона, %.2f - %.2f, составляет: %.2f%n%n", range2.getFrom(), range2.getTo(), range2.getTo() - range2.getFrom());
+        System.out.printf("%nВторого диапазона (%.2f; %.2f), длина составляет: %.2f%n%n", range2.getFrom(), range2.getTo(), range2.getTo() - range2.getFrom());
 
         Range intersection = range1.getIntersection(range2);
         System.out.println("Пересечение диапазонов:");
+
+        System.out.print("[");
+
         if (intersection != null) {
-            System.out.println(intersection.getFrom() + " - " + intersection.getTo());
+            System.out.print("(" + intersection.getFrom() + "; " + intersection.getTo() + ")");
         } else {
-            System.out.println(intersection);
+            System.out.print("null");
         }
 
-        Range[] combine = range1.getUnion(range2);
+        System.out.println("]");
+
+        Range[] union = range1.getUnion(range2);
         System.out.println("Объединение диапазонов:");
 
-        for (Range range : combine) {
-            System.out.println(range.getFrom() + " - " + range.getTo());
+        System.out.print("[");
+        for (Range range : union) {
+            System.out.print("(" + range.getFrom() + "; " + range.getTo() + ")");
         }
+
+        System.out.println("]");
 
         System.out.println("Получение разности диапазонов:");
         Range[] difference = range1.getDifference(range2);
+
+        System.out.print("[");
+
         for (Range range : difference) {
-            System.out.println(range.getFrom() + " - " + range.getTo());
+            System.out.print("(" + range.getFrom() + "; " + range.getTo() + ")");
         }
+
+        System.out.println("]");
     }
 }

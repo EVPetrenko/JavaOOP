@@ -3,13 +3,13 @@ package ru.nsk.petrenko.range;
 public class Range {
     private double from;
     private double to;
-    private String name;
 
     public Range(double from, double to) {
         this.from = from;
         this.to = to;
     }
 
+    /*    Если единственное/однократное задание значений без Сеттеров являеться плохим стилем, дайте знать
     public void setFrom(double from) {
         this.from = from;
     }
@@ -17,6 +17,7 @@ public class Range {
     public void setTo(double to) {
         this.to = to;
     }
+*/
 
     public double getFrom() {
         return from;
@@ -34,34 +35,44 @@ public class Range {
         return number >= from && number <= to;
     }
 
-    //    10. Общее по пересечению и т.д. - можно сильно упростить условие пересечения - Не нашёл решения
-    public Range getIntersection(Range range2) { // пересечение
-        if ((range2.from < this.to && range2.from >= this.from) || (this.from < range2.to && this.from >= range2.from)) {
-            return new Range(Math.max(this.from, range2.from), Math.min(this.to, range2.to));
+    public Range getIntersection(Range range) { // Пересечение
+        if ((to > range.from && to < range.to) || (range.to > from && range.to < to)) {
+            return new Range(Math.max(from, range.from), Math.min(to, range.to));
         }
 
         return null;
     }
 
-    public Range[] getUnion(Range range2) { // Объединение интервалов
-        if ((range2.from >= this.from && range2.from <= this.to) || (this.to >= range2.from && this.to <= range2.to)) {
-            return new Range[]{new Range(Math.min(this.from, range2.from), Math.max(this.to, range2.to))};
+    public Range[] getUnion(Range range) { // Объединение
+        if (range.to < from || to < range.from) {
+            if (from < range.from) {
+                return new Range[]{new Range(from, to), new Range(range.from, range.to)};
+            }
+
+            return new Range[]{new Range(range.from, range.to), new Range(from, to)};
+
         }
 
-        return new Range[]{new Range(this.from, this.to), new Range(range2.from, range2.to)};
+        return new Range[]{new Range(Math.min(from, range.from), Math.max(to, range.to))};
     }
 
-    public Range[] getDifference(Range range2) { // Получение разности
-        if (range2.from < this.from && this.from < range2.to && range2.to < this.to) {
-            return new Range[]{new Range(range2.to, this.to)};
-        } else if (range2.from > this.from && this.to > range2.from && range2.to > this.to) {
-            return new Range[]{new Range(this.from, range2.from)};
-        } else if (range2.from < this.from && this.to < range2.to) {
-            return new Range[]{new Range(range2.from, this.from), new Range(this.to, range2.to)};
-        } else if (this.from < range2.from && range2.to < this.to) {
-            return new Range[]{new Range(this.from, range2.from), new Range(range2.to, this.to)};
+    public Range[] getDifference(Range range) { // Разность
+        if (range.to < from || to < range.from) {
+            return new Range[]{new Range(from, to)};
         }
 
-        return new Range[]{new Range(this.from, this.to)};
+        if (range.from < from && range.to < to) {
+            return new Range[]{new Range(range.to, to)};
+        }
+
+        if (range.from > from && range.to > to) {
+            return new Range[]{new Range(from, range.from)};
+        }
+
+        if (range.from < from && to < range.to) {
+            return new Range[]{new Range(range.from, from), new Range(to, range.to)};
+        }
+
+        return new Range[]{new Range(from, range.from), new Range(range.to, to)};
     }
 }
