@@ -1,4 +1,4 @@
-package ru.nsk.petrenko.shapes.shapesMain;
+package shapes.shapesMain;
 
 public class ShapesMain {
 

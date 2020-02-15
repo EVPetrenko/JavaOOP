@@ -1,4 +1,4 @@
-package ru.nsk.petrenko.shapes;
+package shapes;
 
 public class Triangle implements Shapes {
     private double x1;

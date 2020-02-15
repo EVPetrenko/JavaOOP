@@ -1,4 +1,4 @@
-package ru.nsk.petrenko.shapes;
+package shapes;
 
 public class Circle implements Shapes {
     private double radius;

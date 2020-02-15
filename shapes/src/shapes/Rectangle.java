@@ -1,4 +1,4 @@
-package ru.nsk.petrenko.shapes;
+package shapes;
 
 public class Rectangle implements Shapes {
     private double width;

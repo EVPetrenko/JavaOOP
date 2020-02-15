@@ -1,4 +1,4 @@
-package ru.nsk.petrenko.shapes;
+package shapes;
 
 public interface Shapes {
     double getWidth();
